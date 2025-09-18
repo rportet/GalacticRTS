@@ -51,6 +51,25 @@ public class Soldier : UnitMovement
     {
         if (target == null) return;
 
+        // VÉRIFIER FACTION AVANT ATTAQUE
+        Faction myFaction = GetComponent<Faction>();
+        Faction targetFaction = target.GetComponent<Faction>();
+
+        if (myFaction != null && targetFaction != null)
+        {
+            if (myFaction.IsAlly(targetFaction))
+            {
+                Debug.Log($"{gameObject.name} refuse d'attaquer allié {target.name}");
+                return;
+            }
+
+            if (!myFaction.IsEnemy(targetFaction))
+            {
+                Debug.Log($"{gameObject.name} refuse d'attaquer unité neutre {target.name}");
+                return;
+            }
+        }
+
         HealthSystem targetHealthSystem = target.GetComponent<HealthSystem>();
         if (targetHealthSystem == null || !targetHealthSystem.IsAlive())
         {
